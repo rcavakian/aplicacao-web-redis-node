@@ -28,7 +28,6 @@ function myScope () {
         const response = document.querySelector('#response');
         response.innerHTML = '';
         const p = createParagragh();
-        // Implementar condicional para a cor da response em caso de True/False
         if (isValid) {
             p.classList.add('paragraph-response');
         } else {
