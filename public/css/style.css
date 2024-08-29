@@ -20,7 +20,7 @@ body {
     line-height: 1.5em;
 }
 
-.conteiner {
+.container {
     max-width: 640px;
     margin: 50px auto;
     background: #fff;
@@ -65,6 +65,26 @@ form button:active {
     background: var(--primary-color-active);
 }
 
-.resposta {
+.response {
     margin-top: 50px;
+}
+
+.paragraph-response {
+    background: #02a950;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-family: 'Robot Mono', 'Open Sans';
+    font-weight: 700;
+    height: 50px;
+    border-radius: 5px;
+}
+
+.paragraph-bad-response {
+    background: #ee4f4f;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-family: 'Robot Mono', 'Open Sans';
+    font-weight: 700;
+    height: 50px;
+    border-radius: 5px;
 }
