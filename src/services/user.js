@@ -13,13 +13,13 @@ const User = require('../models/user');
  */
 async function addUser(User) {
     // Registrar o momento em que o usuário foi criado
-    const timeStamp = Date.now();
+    const timeStamp = new Date;
 
     // Criar novo hash para o usuário
     await redisClient.hSet(`${User.userId}`, 'login', User.login, 'name', User.name, 'email', User.email, 'active', User.active);
 
     // Incluir novo usuário no Sorted Set usersSet
-    usersSetService.addUserToSet(User.userId, timeStamp);    
+    usersSetService.addUserToSet(User.userId, timeStamp.toISOString());    
 }
 
 /**

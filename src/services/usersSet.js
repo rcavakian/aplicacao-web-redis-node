@@ -1,22 +1,22 @@
-import redisClient from "../database/database";
+const redisClient =  require ("../database/database");
 
 // Função que adiciona usuário no set
-function addUserToSet(redisClient, userId, score) {
-
+async function addUserToSet(userId, timeStamp) {
+    await redisClient.zAdd('users', `${timeStamp}`, `${userId}`);
 }
 
 // Função que lista todos os usuários do Set
-function getAllUsersFromSet(redisClient) {
-
+async function getAllUsersFromSet() {
+    const allUsers = await redisClient.zRange('users', 0, -1);
 }
 
 // Função que retorna um usuário
-function getUserFromSet(redisClient, userId) {
+async function getUserFromSet(redisClient, userId) {
 
 }
 
 // Função que atualiza um usuário
-function updateUserFromSet(redisClient, userId, score) {
+function updateUserFromSet(redisClient, userId, timeStamp) {
 
 }
 

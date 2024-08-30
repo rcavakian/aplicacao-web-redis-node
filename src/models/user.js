@@ -2,8 +2,14 @@
 import { v4 as uuidv4 } from 'uuid'; // para gerar id unico
 
 class User {
-    constructor(login, name, email, active) {
-        this.userId =  `user:${uuidv4()}`;
+    userId;
+    login;
+    name;
+    email;
+    active;
+
+    constructor(login, name, email, active, userId = null) {
+        this.userId =  userId ? userId: `user:${uuidv4()}`;
         this.login = login;
         this.name = name;
         this.email = email;
