@@ -10,7 +10,7 @@ const User = require('../models/user');
  * @param {string} email 
  * @param {boolean} active ativo (1) ou inativo (0)
  */
-async function addUser(User) {
+async function createUser(User) {
     // Registrar o momento em que o usuário foi criado
     const timeStamp = new Date();
 
@@ -25,8 +25,8 @@ async function addUser(User) {
  * Função que retorna um usuário
  * @param {string} userId 
  */
-async function getUser(User) {
-    return await redisClient.hGetAll(`${User.userId}`);
+async function getUser(userId) {
+    return await redisClient.hGetAll(`${userId}`);
 }
 
 /**
@@ -68,4 +68,4 @@ async function updateUser (redisClient, userId, data) {
     return userFound;
 }
 
-module.exports = { addUser, getUser, disableUser, updateUser };
+module.exports = { createUser, getUser, disableUser, updateUser };
