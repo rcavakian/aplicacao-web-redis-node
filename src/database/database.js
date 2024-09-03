@@ -1,4 +1,4 @@
-const { createCliente } = require('redis');
+import { createCliente } from 'redis';
 
 const redisHost = process.env.REDIS_HOST;
 const redisPort = process.env.REDIS_PORT;
