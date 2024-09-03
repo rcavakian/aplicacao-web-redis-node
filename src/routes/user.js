@@ -16,3 +16,5 @@ router.put("/:id", userController.updateUser)
 // O middleware serve para previnir acessos indevidos ao banco
 // middleware utilizando regex para esperar formato "user:" + uuid.length
 router.delete("/disable/:id", userController.disableUser);
+
+module.exports = router;

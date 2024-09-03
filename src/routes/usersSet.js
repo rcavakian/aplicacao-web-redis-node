@@ -14,3 +14,4 @@ router.put('/:id', usersSetController.updateUserFromSet);
 
 router.delete('/:id', usersSetController.deleteUserFromSet);
 
+ module.exports = router;
