@@ -23,10 +23,6 @@ function addUsertoSet(req, res) {
   );
 }
 
-function removeUserFromSet() {
-
-}
-
 function updateUserFromSet(req, res) {
     service.updateUserFromSet(req.params.id).then(
         (userUpdated) => {
@@ -77,4 +73,4 @@ function deleteUserFromSet(req, res) {
   );
 }
 
-module.exports = { listAllUsers, addUsertoSet, removeUserFromSet, updateUserFromSet, listUserFromSet, deleteUserFromSet };
+module.exports = { listAllUsers, addUsertoSet, updateUserFromSet, listUserFromSet, deleteUserFromSet };
