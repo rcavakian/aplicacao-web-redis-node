@@ -44,12 +44,37 @@ function updateUserFromSet(req, res) {
     );
 }
 
-function listUserFromSet() {
-
+function listUserFromSet(req, res) {
+  service
+    .getTimeStampFromSet(req.params.id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: "Usuário não localizado" });
+      }
+      return res.send({ data: user });
+    })
+    .catch((error) => {
+      res.status(500).send({ error: error });
+    });
 }
 
-function deleteUserFromSet() {
-
+function deleteUserFromSet(req, res) {
+  service.deleteUserFromSet(req.params.id).then(
+    (userDeleted) => {
+      if (!userDeleted) {
+        return res.status(404).send({ message: "Usuário não encontrado" });
+      }
+      return res.send({
+        message: "Usuário removido com sucesso",
+        user: userDeleted,
+      });
+    },
+    (error) => {
+      return res.status(500).send({
+        message: error,
+      });
+    }
+  );
 }
 
 module.exports = { listAllUsers, addUsertoSet, removeUserFromSet, updateUserFromSet, listUserFromSet, deleteUserFromSet };
