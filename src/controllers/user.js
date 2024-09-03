@@ -17,7 +17,8 @@ function createUser(req, res) {
 }
 
 function listUser(req, res) {
-  service.getUser(req.params.id)
+  service
+    .getUser(req.params.id)
     .then((user) => {
       return res.send({ data: user });
     })
