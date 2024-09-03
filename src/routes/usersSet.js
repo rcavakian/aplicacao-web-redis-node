@@ -1,6 +1,6 @@
 const express = require('express');
 const usersSetController = require ('../controllers/usersSet');
-// const middlewares = require('../middlewares/')
+const middlewares = require('../middlewares/middlewares')
 const router = express.Router();
 
 // TODO: implementar middleware para validar formayto do usuario
