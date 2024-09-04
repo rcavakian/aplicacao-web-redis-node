@@ -7,17 +7,17 @@ const router = express.Router()
 // TODO implementar middleware para validar o usuario se está vindo no formato
 // O middleware serve para previnir acessos indevidos ao banco
 // middleware utilizando regex para esperar formato "user:" + uuid.length
-router.get("/:id", userController.listUser);
+router.get("/:id", middlewares.validateUserId, userController.listUser);
 
 // TODO: implementar middlewares de validação do negócio
-router.post("/", userController.createUser);
+router.post("/", middlewares.validateEmail, userController.createUser);
 
 // TODO: implementar middlewares de validação do negócio
-router.put("/:id", userController.updateUser)
+router.put("/update", middlewares.validateUserId, userController.updateUser)
 
 // TODO implementar middleware para validar o usuario se está vindo no formato
 // O middleware serve para previnir acessos indevidos ao banco
 // middleware utilizando regex para esperar formato "user:" + uuid.length
-router.delete("/disable/:id", userController.disableUser);
+router.delete("/disable/:id", middlewares.validateUserId, userController.disableUser);
 
 module.exports = router;
