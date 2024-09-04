@@ -8,9 +8,9 @@ router.get('/:id', usersSetController.listUserFromSet);
 
 router.get('/users', usersSetController.listAllUsers);
 
-router.post('/:id', usersSetController.addUsertoSet);
+router.post('/', usersSetController.addUsertoSet);
 
-router.put('/:id', usersSetController.updateUserFromSet);
+router.put('/', usersSetController.updateUserFromSet);
 
 router.delete('/:id', usersSetController.deleteUserFromSet);
 

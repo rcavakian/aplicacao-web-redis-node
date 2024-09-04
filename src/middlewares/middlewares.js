@@ -30,3 +30,5 @@ function validateEmail(req, res, next) {
     }
     return next();
 }
+
+module.exports = { validateUserId, validateEmail };
