@@ -20,4 +20,4 @@ router.put("/update", middlewares.validateUserId, userController.updateUser)
 // middleware utilizando regex para esperar formato "user:" + uuid.length
 router.delete("/disable/:id", middlewares.validateUserId, userController.disableUser);
 
-module.exports = router;
+module.exports = { router };

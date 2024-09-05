@@ -38,4 +38,4 @@ async function deleteUserFromSet(userId) {
     return userFound;
 }
 
-module.exports = { addUserToSet, getAllUsersFromSet, getTimeStampFromSet, updateUserFromSet, deleteUserFromSet }
+module.exports = { addUserToSet, getAllUsersFromSet, getTimeStampFromSet, updateUserFromSet, deleteUserFromSet };
