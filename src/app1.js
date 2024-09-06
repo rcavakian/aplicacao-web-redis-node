@@ -37,32 +37,34 @@ app.use(methodOverride("_method"));
 
 // Página de busca
 app.get('/', function (req, res, next) {
-  res.render('layouts/searchusers');
+  return res.render('layouts/searchusers');
 });
 
 // Processar a busca de usuário
-app.post('/user/search', async function (req, res, next) {
-    let id = req.body.id;
-    console.log(req.body);
+app.post("/user/search", async function (req, res, next) {
+  let id = req.body.id;
+  console.log(req.body);
+  if (id) {
     try {
-        console.log('Tentando obter dados do Redis...');
-        const obj = await redisClient.hGetAll(id);
-        console.log('Dados retornados:', obj);
+      console.log("Tentando obter dados do Redis...");
+      const obj = await redisClient.hGetAll(id);
+      console.log("Dados retornados:", obj);
 
-        if(!obj || Object.keys(obj).length === 0) {
-            res.render('layouts/searchusers', {
-                error: 'Usuário não encontrado',
-            });
-        } else {
-            obj.id = id;
-            res.render('layouts/details', {
-                user: obj,
-            })
-        }
+      if (!obj || Object.keys(obj).length === 0) {
+        res.render("layouts/searchusers", {
+          error: "Usuário não encontrado",
+        });
+      } else {
+        obj.id = id;
+        res.render("layouts/details", {
+          user: obj,
+        });
+      }
     } catch (err) {
-        console.error('Erro ao buscar dados do Redis: ', err);
-        res.status(500).send('Erro no servidor');
+      console.error("Erro ao buscar dados do Redis: ", err);
+      res.status(500).send("Erro no servidor");
     }
+  }
 });
 
 // Página incluir usuário
@@ -72,24 +74,36 @@ app.get('/user/add', function (req, res, next) {
 
 app.post('/user/add', async function (req, res, next){
     let id = req.body.id;
+    let login = req.body.login;
     let first_name = req.body.first_name;
     let last_name = req.body.last_name;
+    let email = req.body.email;
+    let active = req.body.active;
     try {
         const obj = await redisClient.hSet(id, [
+            'login', login,
             'first_name', first_name,
-            'last_name', last_name
+            'last_name', last_name,
+            'email', email,
+            'active', active
         ]);
         if (!obj || Object.keys(obj).length === 0) {
-            res.render('layouts/adduser', {
+            return res.render('layouts/adduser', {
                 error: 'Dados incompletos',
             });
         }
-        res.redirect('/');
+        return res.redirect('/');
     } catch (err) {
         console.log('Erro ao incluir usuário: ', err);
-        res.status(500).send('Erro no servidor');
+        return res.status(500).send('Erro no servidor');
     }
 });
+
+// Remover um usuário a partir da view details
+app.delete('/user/delete/:id', async function (req, res, next) {
+    await redisClient.del(req.params.id);
+    res.redirect('/');
+})
 
 app.listen(port, function () {
   console.log(`Servidor iniciado na porta ${port}`);

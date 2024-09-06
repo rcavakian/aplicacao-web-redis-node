@@ -8,6 +8,10 @@
         <input type="text" name="id" class="form-control" placeholder="ID">
     </div>
     <div class="form-group">
+        <label><strong>Login:</strong></label>
+        <input type="text" name="login" class="form-control" placeholder="Login">
+    </div>
+    <div class="form-group">
         <label><strong>Nome:</strong></label>
         <input type="text" name="first_name" class="form-control" placeholder="Nome">
     </div>
@@ -15,5 +19,16 @@
         <label><strong>Sobrenome:</strong></label>
         <input type="text" name="last_name" class="form-control" placeholder="Sobrenome">
     </div>
-    <input type="submit" class="btn btn-primary" value="Incluir">
+    <div class="form-group">
+        <label><strong>E-mail:</strong></label>
+        <input type="email" name="email" class="form-control" placeholder="E-mail">
+    </div>
+    <div class="radio-group">
+        <label><strong>Ativo:</strong></label>
+        <input type="radio" id="yes" name="option" value="yes" required>
+        <label for="yes"><strong>Sim</strong></label>
+        <input type="radio" id="no" name="option" value="no" required>
+        <label for="no"><strong>Não</strong></label>
+    </div>
+    <input type="submit" class="btn btn-primary btn-incluir" value="Incluir">
 </form>
