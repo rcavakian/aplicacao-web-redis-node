@@ -4,9 +4,15 @@
     <li class="list-group-item"><strong>Nome: </strong>{{user.first_name}}</li>
     <li class="list-group-item"><strong>Sobrenome: </strong>{{user.last_name}}</li>
     <li class="list-group-item"><strong>E-mail: </strong>{{user.email}}</li>
+    <li class="list-group-item"><strong>Ativo: </strong>{{translateBoolean user.active}}</li>
 </ul>
 <div class="buttons-container">
-    <a class="btn btn-primary btn-voltar" href="/">Voltar</a>
+    <form method="GET" action="/">
+        <input type="submit" class="btn btn-primary" value="Voltar">
+    </form>
+    <form method="GET" action="/user/edit/{{user.id}}">
+        <input type="submit" class="btn btn-primary" value="Alterar">
+    </form>
     <form method="POST" action="/user/delete/{{user.id}}?_method=DELETE">
         <input type="submit" class="btn btn-danger" value="Remover">
     </form>

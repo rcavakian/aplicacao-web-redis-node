@@ -1,0 +1,32 @@
+{{!-- // TODO: implementar pagina que carregue dados de um usuário para edição --}}
+<h1>Atualizar usuário {{user.first_name}} {{user.last_name}} [{{id}}]</h1>
+<form method="POST" action="/user/update/{{user.id}}?_method=PUT">
+    <div class="form-group">
+        <label for="id">ID:</label>
+        <input type="text" class="form-control" id="id" name="id" value="{{id}}">
+    </div>
+    <div class="form-group">
+        <label for="login">Login</label>
+        <input type="text" class="form-control" id="login" name="login" value="{{user.login}}">
+    </div>
+    <div class="form-group">
+        <label for="first_name">Nome:</label>
+        <input type="text" class="form-control" id="first_name" name="first_name" value="{{user.first_name}}">
+    </div>
+    <div class="form-group">
+        <label for="last_name">Sobrenome:</label>
+        <input type="text" class="form-control" id="last_name" name="last_name" value="{{user.last_name}}">
+    </div>
+    <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{user.email}}">
+    </div>
+    <div class="radio-group">
+        <label><strong>Ativo:</strong></label>
+        <input type="radio" id="yes" name="option" value="yes" required {{#if (eq user.active 'true')}}checked{{/if}}>
+        <label for="yes"><strong>Sim</strong></label>
+        <input type="radio" id="no" name="option" value="no" required {{#if (eq user.active 'false')}}checked{{/if}}>
+        <label for="no"><strong>Não</strong></label>
+    </div>
+    <button type="submit" class="btn btn-success">Confirmar</button>
+</form>

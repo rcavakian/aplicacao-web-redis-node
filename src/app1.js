@@ -19,6 +19,15 @@ const app = express();
 app.engine("handlebars", exphbs.engine);
 app.set("view engine", "handlebars");
 
+// Registrar o helper 'translateBoolean'
+const handlebars = require('handlebars');
+handlebars.registerHelper('translateBoolean', function (value) {
+  return value === 'true' || value === true ? 'Sim' : 'Não';
+});
+handlebars.registerHelper('eq', function (v1, v2) {
+  return v1 === v2;
+});
+
 // Confirgurar o diretório das views
 app.set("views", path.join(__dirname, 'views'));
 
@@ -69,8 +78,8 @@ app.post("/user/search", async function (req, res, next) {
 
 // Página incluir usuário
 app.get('/user/add', function (req, res, next) {
-    res.render('layouts/adduser');
-  });
+  res.render('layouts/adduser');
+});
 
 app.post('/user/add', async function (req, res, next){
     let id = req.body.id;
@@ -78,26 +87,50 @@ app.post('/user/add', async function (req, res, next){
     let first_name = req.body.first_name;
     let last_name = req.body.last_name;
     let email = req.body.email;
-    let active = req.body.active;
+    let active = (req.body.active === 'yes') ? true : false;
+    const activeString = active === true ? 'true' : 'false';
+    console.log("ID:", id);
+    console.log("Login:", login);
+    console.log("First Name:", first_name);
+    console.log("Last Name:", last_name);
+    console.log("Email:", email);
+    console.log("Active:", activeString);
+
+    
     try {
         const obj = await redisClient.hSet(id, [
             'login', login,
             'first_name', first_name,
             'last_name', last_name,
             'email', email,
-            'active', active
+            'active', activeString
         ]);
-        if (!obj || Object.keys(obj).length === 0) {
-            return res.render('layouts/adduser', {
-                error: 'Dados incompletos',
-            });
-        }
         return res.redirect('/');
     } catch (err) {
         console.log('Erro ao incluir usuário: ', err);
         return res.status(500).send('Erro no servidor');
     }
 });
+
+app.get('/user/edit', function (req, res, next) {
+  res.render('layouts/edituser');
+})
+
+// Editar um usuário a partir da view searchusers
+app.get("/user/edit/:id", async function (req, res, next) {
+  const id = req.params.id;
+  try {
+    const user = await await redisClient.hGetAll(id);
+    if (!user || Object.keys(user).length === 0) {
+      return res.render("error", { message: "Usuário não encontrado" });
+    }
+    return res.render("layouts/edituser", { user, id });
+  } catch (err) {
+    console.log("Erro ao buscar dados do Redis: ", err);
+    return res.status(500).send("Erro no servidor Redis");
+  }
+});
+
 
 // Remover um usuário a partir da view details
 app.delete('/user/delete/:id', async function (req, res, next) {
