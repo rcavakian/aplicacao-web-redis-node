@@ -1,6 +1,9 @@
 {{!-- // TODO: implementar pagina que carregue dados de um usuário para edição --}}
-<h1>Atualizar usuário {{user.first_name}} {{user.last_name}} [{{id}}]</h1>
-<form method="POST" action="/user/update/{{user.id}}?_method=PUT">
+<h1>Atualizar usuário: {{user.first_name}} {{user.last_name}} [{{id}}]</h1>
+{{#if error}}
+<strong><span>{{error}}</span></strong>
+{{/if}}
+<form method="POST" action="/user/update?_method=PUT">
     <div class="form-group">
         <label for="id">ID:</label>
         <input type="text" class="form-control" id="id" name="id" value="{{id}}">
@@ -23,9 +26,9 @@
     </div>
     <div class="radio-group">
         <label><strong>Ativo:</strong></label>
-        <input type="radio" id="yes" name="option" value="yes" required {{#if (eq user.active 'true')}}checked{{/if}}>
+        <input type="radio" id="yes" name="active" value="yes" required {{#if (eq user.active 'true')}}checked{{/if}}>
         <label for="yes"><strong>Sim</strong></label>
-        <input type="radio" id="no" name="option" value="no" required {{#if (eq user.active 'false')}}checked{{/if}}>
+        <input type="radio" id="no" name="active" value="no" required {{#if (eq user.active 'false')}}checked{{/if}}>
         <label for="no"><strong>Não</strong></label>
     </div>
     <button type="submit" class="btn btn-success">Confirmar</button>

@@ -69,8 +69,8 @@ app.post("/user/search", async function (req, res, next) {
           user: obj,
         });
       }
-    } catch (err) {
-      console.error("Erro ao buscar dados do Redis: ", err);
+    } catch (error) {
+      console.error("Erro ao buscar dados do Redis: ", error);
       res.status(500).send("Erro no servidor");
     }
   }
@@ -89,13 +89,6 @@ app.post('/user/add', async function (req, res, next){
     let email = req.body.email;
     let active = (req.body.active === 'yes') ? true : false;
     const activeString = active === true ? 'true' : 'false';
-    console.log("ID:", id);
-    console.log("Login:", login);
-    console.log("First Name:", first_name);
-    console.log("Last Name:", last_name);
-    console.log("Email:", email);
-    console.log("Active:", activeString);
-
     
     try {
         const obj = await redisClient.hSet(id, [
@@ -106,8 +99,8 @@ app.post('/user/add', async function (req, res, next){
             'active', activeString
         ]);
         return res.redirect('/');
-    } catch (err) {
-        console.log('Erro ao incluir usuário: ', err);
+    } catch (error) {
+        console.log('Erro ao incluir usuário: ', error);
         return res.status(500).send('Erro no servidor');
     }
 });
@@ -122,15 +115,51 @@ app.get("/user/edit/:id", async function (req, res, next) {
   try {
     const user = await await redisClient.hGetAll(id);
     if (!user || Object.keys(user).length === 0) {
-      return res.render("error", { message: "Usuário não encontrado" });
+      return res.render("layouts/edituser", { error: `Usuário ${id} não encontrado` });
     }
     return res.render("layouts/edituser", { user, id });
-  } catch (err) {
-    console.log("Erro ao buscar dados do Redis: ", err);
+  } catch (error) {
+    console.log("Erro ao buscar dados do Redis: ", error);
     return res.status(500).send("Erro no servidor Redis");
   }
 });
 
+// Função para enviar dados editados ao Redis
+app.put("/user/update", async function (req, res, next) {
+  const id = req.body.id;
+  console.log("login:", req.body.login || "null ou undefined");
+
+  try {
+    const userFound = await redisClient.hGetAll(id);
+    if (!userFound || Object.keys(userFound).length === 0) {
+      res.render("layouts/edituser", { error: "Usuário não encontrado" });
+      return;
+    }
+
+    const active = req.body.active === "yes" ? true : false;
+    const activeString = active === true ? "true" : "false";
+
+    userFound.login = req.body.login ?? userFound.login;
+    userFound.first_name = req.body.first_name ?? userFound.first_name;
+    userFound.last_name = req.body.last_name ?? userFound.last_name;
+    userFound.email = req.body.email ?? userFound.email;
+    userFound.active = activeString;
+
+    const updatedUser = {
+      login: userFound.login,
+      first_name: userFound.first_name,
+      last_name: userFound.last_name,
+      email: userFound.email,
+      active: userFound.active,
+    };
+
+    await redisClient.hSet(id, updatedUser);
+    res.redirect("/");
+  } catch (error) {
+    console.log("Erro ao buscar dados do Redis", error);
+    return res.status(500).send("Erro no servidor Redis");
+  }
+});
 
 // Remover um usuário a partir da view details
 app.delete('/user/delete/:id', async function (req, res, next) {
