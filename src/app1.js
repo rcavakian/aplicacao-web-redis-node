@@ -131,6 +131,7 @@ app.put("/user/update", async function (req, res, next) {
 
   try {
     const userFound = await redisClient.hGetAll(id);
+    
     if (!userFound || Object.keys(userFound).length === 0) {
       res.render("layouts/edituser", { error: "Usuário não encontrado" });
       return;
@@ -139,10 +140,10 @@ app.put("/user/update", async function (req, res, next) {
     const active = req.body.active === "yes" ? true : false;
     const activeString = active === true ? "true" : "false";
 
-    userFound.login = req.body.login ?? userFound.login;
-    userFound.first_name = req.body.first_name ?? userFound.first_name;
-    userFound.last_name = req.body.last_name ?? userFound.last_name;
-    userFound.email = req.body.email ?? userFound.email;
+    userFound.login = (req.body.login !== "") ? req.body.login : userFound.login;
+    userFound.first_name = (req.body.first_name !== "") ? req.body.first_name : userFound.first_name;
+    userFound.last_name = (req.body.last_name !== "") ? req.body.last_name : userFound.last_name;
+    userFound.email = (req.body.email !== "") ?  req.body.email : userFound.email;
     userFound.active = activeString;
 
     const updatedUser = {
