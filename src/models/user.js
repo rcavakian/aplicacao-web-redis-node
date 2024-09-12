@@ -18,3 +18,9 @@ class User {
 }
 
 module.exports = { User };
+
+// scan(`user:*:veiculo`)
+
+// smembers(`users`)
+
+// username:marcosantonio  -> 3 --> hgetall(user:3)

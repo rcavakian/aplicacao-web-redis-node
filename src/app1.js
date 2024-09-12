@@ -21,12 +21,16 @@ app.set("view engine", "handlebars");
 
 // Registrar o helper 'translateBoolean'
 const handlebars = require('handlebars');
+
 handlebars.registerHelper('translateBoolean', function (value) {
   return value === 'true' || value === true ? 'Sim' : 'Não';
 });
 handlebars.registerHelper('eq', function (v1, v2) {
   return v1 === v2;
 });
+handlebars.registerHelper('increment', function(value) {
+  return parseInt(value) + 1;
+})
 
 // Confirgurar o diretório das views
 app.set("views", path.join(__dirname, 'views'));
@@ -89,6 +93,7 @@ app.post('/user/add', async function (req, res, next){
     let email = req.body.email;
     let active = (req.body.active === 'yes') ? true : false;
     const activeString = active === true ? 'true' : 'false';
+    const timestamp = new Date;
     
     try {
         const obj = await redisClient.hSet(id, [
@@ -98,6 +103,14 @@ app.post('/user/add', async function (req, res, next){
             'email', email,
             'active', activeString
         ]);
+        const userAdd = await redisClient.zAdd('users', [
+          {
+            score: timestamp.valueOf(),
+            value: id,
+          }
+        ]);
+        console.log(`Usuário ${userAdd} incluído.`);
+
         return res.redirect('/');
     } catch (error) {
         console.log('Erro ao incluir usuário: ', error);
@@ -163,11 +176,52 @@ app.put("/user/update", async function (req, res, next) {
 });
 
 // Remover um usuário a partir da view details
-app.delete('/user/delete/:id', async function (req, res, next) {
+app.delete("/user/delete/:id", async function (req, res, next) {
     await redisClient.del(req.params.id);
     res.redirect('/');
 })
 
 app.listen(port, function () {
   console.log(`Servidor iniciado na porta ${port}`);
+});
+
+// Renderizar a tela de consulta a todos os usuários
+app.get("/users", async function (req, res, next) {
+  try {
+    const returnTo = req.query.returnTo || null;
+    const usersList = [];
+    for await (const { score, value } of redisClient.zScanIterator('users')) {
+      usersList.push({ id: value, timestamp: score });
+    }
+    if (!usersList || usersList.length === 0) {
+      return res.render("layouts/userslist", { error: "Lista vazia" });
+    }
+
+    console.log('userlist: ', usersList);
+
+    res.render("layouts/userslist", { usersList, returnTo });
+  } catch (error) {
+    console.error("Erro ao buscar usuários no Redis:", error);
+    res.status(500).send("Erro ao buscar usuários");
+  }
+});
+
+// A partir da tela 'Lista de Usuários' mostrar detalhes de um usuário
+app.get("/users/details/:id", async function (req, res, next) {
+  const id = req.params.id;
+
+  try {
+    const userDetails = await redisClient.hGetAll(id);
+    if (!userDetails || Object.keys(userDetails) === 0) {
+      return res
+        .status(404)
+        .render("layouts/userslist", { error: "Usuário não encontrado" });
+    }
+
+    userDetails.id = id;
+    res.render("layouts/details", { user: userDetails });
+  } catch (error) {
+    console.error("Erro ao buscar detalhes do usuário:", error);
+    res.status(500).send("Erro ao buscar detalhes do usuário");
+  }
 });

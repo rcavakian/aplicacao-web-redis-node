@@ -1,0 +1,38 @@
+{{!-- TODO: implementar view para listar todos usurarios do SORTED SET --}}
+<h1>Todos usuários</h1>
+{{#if error}}
+<strong><span>{{error}}</span></strong>
+{{/if}}
+
+<table>
+    <thead>
+        <tr>
+            <th><strong> # </strong></th>
+            <th><strong>ID</strong></th>
+            <th><strong>Data de registro(timestamp)</strong></th>
+            <th><strong>Consulta</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each usersList}}
+        <tr>
+            <td>{{increment @index}}</td>
+            <td>{{this.id}}</td>
+            <td>{{this.timestamp}}</td>
+            <td><a href="/users/details/{{this.id}}?returnTo={{this.id}}">Ver Detalhes</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<script>
+    window.onload = function() {
+        const returnTo = "{{returnTo}}";
+        if (returnTo) {
+            const row = document.querySelector(`td:contains('${returnTo}')`).parentElement;
+            if (row) {
+                row.scrollIntoView({ behavior: 'smooth'});
+            }
+        }
+    };
+</script>
