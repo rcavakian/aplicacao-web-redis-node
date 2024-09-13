@@ -197,6 +197,18 @@ app.get("/users", async function (req, res, next) {
       return res.render("layouts/userslist", { error: "Lista vazia" });
     }
 
+    for (let i = 0; i < usersList.length; i++) {
+      try {
+        const timeStamp = usersList[i].timestamp;
+        const date = new Date(timeStamp);
+        const formattedDateTime = date.toLocaleString("pt-BR");
+        usersList[i].timestamp = formattedDateTime;
+      } catch (formatError) {
+        console.error(`Erro ao formatar timstamppara o usuário com ID ${usersList[i].id}`, formatError)
+        usersList[i].timestamp = "Data inválida";
+      }
+    }
+
     console.log('userlist: ', usersList);
 
     res.render("layouts/userslist", { usersList, returnTo });
