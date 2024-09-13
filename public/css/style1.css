@@ -1,4 +1,6 @@
 /* TODO: organizar a ordem dos itens */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
 * {
     box-sizing: border-box;
     outline: 0;
@@ -8,7 +10,13 @@ body {
     margin: 0;
     padding: 0;
     font-size: 1.3em;
+    font-family: 'Robot-Mono', 'Open Sans', sans-serif;
     line-height: 1.5em;
+}
+
+h1 {
+    margin-top: 15px; 
+    margin-bottom: 15px; 
 }
 
 form input, form label, form button {
@@ -30,10 +38,6 @@ li.list-group-item {
     padding: 15px;
 }
 
-h1 {
-    margin-top: 15px; 
-    margin-bottom: 15px; 
-}
 
 .list-group-item, form input {
     height: 50px; 
@@ -66,4 +70,47 @@ input[type="radio"] {
 .radio-group label {
     margin-right: -20px; /* Espaçamento entre as opções */
 
+}
+
+/* Estilo para a tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1.2em;
+    text-align: center;
+    max-height: 400px;
+    overflow-y: auto;
+    display: block;
+}
+
+/* Estilo para o cabeçalho da tabela */
+table thead {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 2px solid #ddd;
+}
+
+table th, table tr {
+    padding: 10px;
+    width: 600px;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Estilo para as linhas da tabela */
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
 }
